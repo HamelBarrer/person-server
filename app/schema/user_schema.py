@@ -6,7 +6,7 @@ class UserBase(BaseModel):
     email: str
     is_active: bool
 
-    class Meta:
+    class Config:
         orm_mode = True
 
 

@@ -5,6 +5,20 @@ from ..models import user_model
 from ..schema import user_schema
 
 
+def read_user(db: Session, user_id: int):
+    person = db.query(user_model.User).filter(
+        user_model.User.user_id == user_id
+    ).first()
+
+    return person
+
+
+def get_users(db: Session):
+    users = db.query(user_model.User).all()
+
+    return users
+
+
 def insert_user(db: Session, user: user_schema.CreateUser):
     person = user_model.User(
         username=user.username,
@@ -19,9 +33,16 @@ def insert_user(db: Session, user: user_schema.CreateUser):
 
 
 def updated_user(db: Session, user: user_schema.UserBase, user_id: int):
-    person = user_model.User.update().where(
-        user_model.User.user_id == 1
-    ).values(username=user.username)
+    person = db.query(user_model.User).filter(
+        user_model.User.user_id == user_id
+    ).first()
+
+    if not person:
+        raise Exception('not found')
+
+    person.username = user.username
+    person.email = user.email
+    person.is_active = user.is_active
 
     db.commit()
 
