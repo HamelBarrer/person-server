@@ -1,8 +1,17 @@
-from sqlalchemy import insert
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from ..models import user_model
 from ..schema import user_schema
+
+
+def get_username_or_email(db: Session, access: str):
+    user = db.query(user_model.User).filter(
+        or_(user_model.User.username == access,
+            user_model.User.email == access)
+    ).first()
+
+    return user
 
 
 def read_user(db: Session, user_id: int):
