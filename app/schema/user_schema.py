@@ -5,7 +5,7 @@ class UserBase(BaseModel):
     user_id: int | None
     username: str
     email: str
-    is_active: bool
+    is_active: bool | None
 
     class Config:
         orm_mode = True
